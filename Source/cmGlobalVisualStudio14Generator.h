@@ -30,7 +30,10 @@ public:
 
   virtual const char* GetToolsVersion() { return "14.0"; }
 protected:
+
   virtual const char* GetIDEVersion() { return "14.0"; }
+
+  virtual bool InitializeAndroid(cmMakefile* mf);
 private:
   class Factory;
 };

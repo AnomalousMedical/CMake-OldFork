@@ -100,6 +100,7 @@ cmGlobalVisualStudio10Generator::cmGlobalVisualStudio10Generator(cmake* cm,
     "ProductDir", vc10Express, cmSystemTools::KeyWOW64_32);
   this->SystemIsWindowsCE = false;
   this->SystemIsWindowsPhone = false;
+  this->SystemIsAndroid = false;
   this->SystemIsWindowsStore = false;
   this->MSBuildCommandInitialized = false;
   this->Version = VS10;
@@ -200,30 +201,29 @@ bool cmGlobalVisualStudio10Generator::InitializeSystem(cmMakefile* mf)
       return false;
       }
     }
-  else if(this->SystemName == "Android")
-    {
-    if(this->DefaultPlatformName != "Win32")
-      {
-      std::ostringstream e;
-      e << "CMAKE_SYSTEM_NAME is 'Android' but CMAKE_GENERATOR "
-        << "specifies a platform too: '" << this->GetName() << "'";
-      mf->IssueMessage(cmake::FATAL_ERROR, e.str());
-      return false;
-      }
-    std::string v = this->GetInstalledNsightTegraVersion();
-    if(v.empty())
-      {
-      mf->IssueMessage(cmake::FATAL_ERROR,
-        "CMAKE_SYSTEM_NAME is 'Android' but "
-        "'NVIDIA Nsight Tegra Visual Studio Edition' "
-        "is not installed.");
-      return false;
-      }
-    this->DefaultPlatformName = "Tegra-Android";
-    this->DefaultPlatformToolset = "Default";
-    this->NsightTegraVersion = v;
-    mf->AddDefinition("CMAKE_VS_NsightTegra_VERSION", v.c_str());
-    }
+  else if (this->SystemName == "Android")
+  {
+	  if (this->DefaultPlatformName == "Tegra-Android")
+	  {
+		  std::string v = this->GetInstalledNsightTegraVersion();
+		  if (v.empty())
+		  {
+			  mf->IssueMessage(cmake::FATAL_ERROR,
+				  "CMAKE_SYSTEM_NAME is 'Android' but "
+				  "'NVIDIA Nsight Tegra Visual Studio Edition' "
+				  "is not installed.");
+			  return false;
+		  }
+		  this->DefaultPlatformName = "Tegra-Android";
+		  this->DefaultPlatformToolset = "Default";
+		  this->NsightTegraVersion = v;
+		  mf->AddDefinition("CMAKE_VS_NsightTegra_VERSION", v.c_str());
+	  }
+	  else if (!this->InitializeAndroid(mf))
+	  {
+		  return false;
+	  }
+  }
 
   return true;
 }
@@ -261,6 +261,15 @@ bool cmGlobalVisualStudio10Generator::InitializeWindowsStore(cmMakefile* mf)
   e << this->GetName() << " does not support Windows Store.";
   mf->IssueMessage(cmake::FATAL_ERROR, e.str());
   return false;
+}
+
+//----------------------------------------------------------------------------
+bool cmGlobalVisualStudio10Generator::InitializeAndroid(cmMakefile* mf)
+{
+	std::ostringstream e;
+	e << this->GetName() << " does not support Android.";
+	mf->IssueMessage(cmake::FATAL_ERROR, e.str());
+	return false;
 }
 
 //----------------------------------------------------------------------------

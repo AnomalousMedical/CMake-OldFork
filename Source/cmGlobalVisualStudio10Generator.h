@@ -81,6 +81,12 @@ public:
   bool TargetsWindowsPhone() const
     { return this->SystemIsWindowsPhone; }
 
+  /** Return true if building for Android */
+  bool TargetsAndroid() const
+  {
+	  return this->SystemIsAndroid;
+  }
+
   /** Return true if building for WindowsStore */
   bool TargetsWindowsStore() const
     { return this->SystemIsWindowsStore; }
@@ -107,6 +113,7 @@ protected:
   virtual bool InitializeWindowsCE(cmMakefile* mf);
   virtual bool InitializeWindowsPhone(cmMakefile* mf);
   virtual bool InitializeWindowsStore(cmMakefile* mf);
+  virtual bool InitializeAndroid(cmMakefile* mf);
 
   virtual std::string SelectWindowsCEToolset() const;
   virtual bool SelectWindowsPhoneToolset(std::string& toolset) const;
@@ -124,6 +131,7 @@ protected:
   bool SystemIsWindowsCE;
   bool SystemIsWindowsPhone;
   bool SystemIsWindowsStore;
+  bool SystemIsAndroid;
   bool ExpressEdition;
 
   bool UseFolderProperty();
