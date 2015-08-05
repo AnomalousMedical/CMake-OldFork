@@ -729,6 +729,7 @@ void cmVisualStudio10TargetGenerator
   if (this->GlobalGenerator->TargetsAndroid())
   {
 	  this->WriteString("<UseDebugLibraries>false</UseDebugLibraries>\n", 2);
+	  this->WriteString("<UseOfStl>gnustl_shared</UseOfStl>\n", 2);
   }
   else
   {
