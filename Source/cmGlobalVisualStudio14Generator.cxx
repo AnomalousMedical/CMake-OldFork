@@ -129,7 +129,7 @@ void cmGlobalVisualStudio14Generator::WriteSLNHeader(std::ostream& fout)
 bool cmGlobalVisualStudio14Generator::InitializeAndroid(cmMakefile* mf)
 {
 	this->DefaultPlatformName = "ARM";
-	this->DefaultPlatformToolset = "Clang_3_6";
+	this->DefaultPlatformToolset = "Clang_3_8";
 	this->SystemIsAndroid = true;
 
 	return true;
